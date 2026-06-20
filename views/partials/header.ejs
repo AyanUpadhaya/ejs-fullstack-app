@@ -1,19 +1,28 @@
-<div class="container-fluid">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
-      Notes
-    </a>
+<header class="site-header">
+  <div class="container-fluid container-fluid-custom">
+    <nav class="d-flex align-items-center justify-content-between py-3">
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-      <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
-    </ul>
+      <!-- Brand -->
+      <a href="/" class="navbar-brand-text text-decoration-none">
+        <i class="bi bi-journal-bookmark-fill me-1" style="font-size:1.1rem; vertical-align:-1px;"></i>Notes
+      </a>
 
-    <div class="col-md-3 text-end">
-      <a href="/auth/google" type="button" class="btn btn-outline-primary me-2">Sing Up</a>
-      <a href="/auth/google" type="button" class="btn btn-primary">Sign In</a>
-    </div>
-  </header>
-</div>
+      <!-- Nav Links -->
+      <ul class="nav d-none d-md-flex align-items-center gap-1">
+        <li><a href="/" class="nav-link-custom">Home</a></li>
+        <li><a href="#" class="nav-link-custom">Features</a></li>
+        <li><a href="#" class="nav-link-custom">FAQs</a></li>
+        <li><a href="/about" class="nav-link-custom">About</a></li>
+      </ul>
+
+      <!-- Auth Buttons -->
+      <div class="d-flex align-items-center gap-2">
+        <a href="/auth/google" id="signUpBtn" class="btn btn-ghost btn-sm">Sign Up</a>
+        <a href="/auth/google" id="signInBtn" class="btn btn-primary btn-sm">
+          <i class="bi bi-google"></i> Sign In
+        </a>
+      </div>
+
+    </nav>
+  </div>
+</header>

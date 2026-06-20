@@ -1,69 +1,389 @@
-<div class="container-fluid container-fluid-custom pb-5 mb-5">
+<!-- ═══════════════════════════════════════════
+     DASHBOARD — My Notes
+════════════════════════════════════════════ -->
 
-  <div class="row mb-4">
-    <div class="col">
-      <h1>Hey, <%= userName %></h1>
+<div class="db-page">
+
+  <!-- ── TOP BAR ── -->
+  <div class="db-topbar">
+    <div class="db-topbar-left">
+      <div class="db-breadcrumb">
+        <i class="bi bi-grid-fill"></i>
+        <span>My Notes</span>
+      </div>
+      <h1 class="db-title">Hey, <em><%= userName %></em> 👋</h1>
     </div>
-    <div class="col text-end">
-      <a href="/dashboard/add" class="btn btn-primary">+ New Note</a>
+
+    <div class="db-topbar-right">
+      <div class="db-stat">
+        <span class="db-stat-num"><%= notes.length %></span>
+        <span class="db-stat-label">on this page</span>
+      </div>
+      <a href="/dashboard/add" id="newNoteBtn" class="db-new-btn">
+        <i class="bi bi-plus"></i>
+        <span>New Note</span>
+      </a>
     </div>
   </div>
 
-  <div class="row">
-    <% if (notes.length > 0) { for(var i=0; i < notes.length; i++) { %>
-      <div class="col-sm-3 mb-4">
-        <div class="card border-primary" style="min-height: 210px">
-          <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none">
-            <h5 class="card-title"><%= notes[i].title %></h5>
-            <p class="card-text"><%= notes[i].body %></p>
-          </a>
-        </div>
-      </div>
-    <%  }} else { %>
-      <div class="row">
-        <div class="col-3">
-          <img src="/img/human-3.svg" alt="Human pointing hand toward a create button">
-        </div>
-        <div class="col mt-md-4">
-          <h2>Okay...</h2>
-          <h4>Let's start with your first note!<br/><br/>
-            <a href="/dashboard/add">Create one!</a>
-          </h4>
-        </div>
-      </div>
-    <% } %>
-  </div>
+  <!-- ── NOTES GRID ── -->
+  <% if (notes.length > 0) { %>
 
-  <% if(notes.length > 0) { %>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center mt-5">
+    <div class="db-grid">
+      <% for(var i = 0; i < notes.length; i++) { %>
+        <a href="/dashboard/item/<%= notes[i]._id %>" class="db-card" id="noteCard<%= i %>">
+          <div class="db-card-accent"></div>
+          <div class="db-card-inner">
+            <h3 class="db-card-title"><%= notes[i].title %></h3>
+            <p class="db-card-body"><%= notes[i].body %></p>
+          </div>
+          <div class="db-card-footer">
+            <i class="bi bi-arrow-up-right db-card-arrow"></i>
+          </div>
+        </a>
+      <% } %>
+    </div>
+
+    <!-- ── PAGINATION ── -->
+    <nav class="db-pagination" aria-label="Notes pagination">
+      <ul class="pagination justify-content-center">
         <% if(current == 1) { %>
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
         <% } else { %>
           <li class="page-item"><a class="page-link" href="/dashboard">First</a></li>
-        <% }  %>
+        <% } %>
         <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
-        <% if (i !== 1 ) { %>
-          <li class="page-item"><a class="page-link" href="#">...</a></li>
+        <% if (i !== 1) { %>
+          <li class="page-item disabled"><a class="page-link" href="#">…</a></li>
         <% } %>
         <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
-          <% if(i == current ) { %>
-            <li class="page-item"><a class="page-link" href="#"><%= i %></a></li>
+          <% if(i == current) { %>
+            <li class="page-item active"><a class="page-link" href="#"><%= i %></a></li>
           <% } else { %>
             <li class="page-item"><a class="page-link" href="/dashboard/?page=<%= i %>"><%= i %></a></li>
           <% } %>
           <% if(i == Number(current) + 4 && i < pages) { %>
-            <li class="page-item"><a class="page-link" href="#">...</a></li>
+            <li class="page-item disabled"><a class="page-link" href="#">…</a></li>
           <% } %>
         <% } %>
         <% if (current == pages) { %>
-            <li class="page-item disabled"><a class="page-link">Last</a></li>
+          <li class="page-item disabled"><a class="page-link">Last</a></li>
         <% } else { %>
-            <li class="page-item"><a href="/dashboard/?page=<%= pages %>" class="page-link">Last</a></li>
+          <li class="page-item"><a href="/dashboard/?page=<%= pages %>" class="page-link">Last</a></li>
         <% } %>
       </ul>
     </nav>
 
+  <% } else { %>
+
+    <!-- ── EMPTY STATE ── -->
+    <div class="db-empty">
+      <div class="db-empty-orb">
+        <i class="bi bi-journal-plus"></i>
+      </div>
+      <h2 class="db-empty-title">No notes yet</h2>
+      <p class="db-empty-sub">Start capturing your thoughts — create your very first note.</p>
+      <a href="/dashboard/add" id="createFirstNoteBtn" class="db-new-btn">
+        <i class="bi bi-plus"></i> Create a note
+      </a>
+    </div>
+
   <% } %>
 
 </div>
+
+<style>
+/* ─── Page shell ─────────────────────────── */
+.db-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+/* ─── Top bar ────────────────────────────── */
+.db-topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-wrap: wrap;
+}
+
+.db-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7c6ef5;
+  margin-bottom: 0.6rem;
+}
+
+.db-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: #e8eaf0;
+  letter-spacing: -0.04em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.db-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, #a39af8 0%, #7c6ef5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.db-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.db-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(124,110,245,0.08);
+  border: 1px solid rgba(124,110,245,0.2);
+  border-radius: 12px;
+  padding: 0.6rem 1.1rem;
+}
+
+.db-stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #a39af8;
+  line-height: 1;
+}
+
+.db-stat-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5c6070;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* ─── New note button ─────────────────────── */
+.db-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #7c6ef5, #5a4fcf);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(124,110,245,0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.db-new-btn i {
+  font-size: 1.1rem;
+}
+
+.db-new-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124,110,245,0.5);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ─── Notes grid ─────────────────────────── */
+.db-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+/* ─── Card ───────────────────────────────── */
+.db-card {
+  position: relative;
+  background: #1e2130;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  cursor: pointer;
+}
+
+.db-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(124,110,245,0.4);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,110,245,0.15);
+  text-decoration: none;
+}
+
+/* colour accent line at top */
+.db-card-accent {
+  height: 3px;
+  background: linear-gradient(90deg, #7c6ef5, #5a9ef5);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.db-card:hover .db-card-accent {
+  opacity: 1;
+}
+
+.db-card-inner {
+  padding: 1.4rem 1.4rem 0.8rem;
+  flex: 1;
+}
+
+.db-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e8eaf0;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.db-card-body {
+  font-size: 0.82rem;
+  color: #9095a8;
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.db-card-footer {
+  padding: 0.6rem 1.4rem 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.db-card-arrow {
+  font-size: 0.9rem;
+  color: #5c6070;
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.db-card:hover .db-card-arrow {
+  opacity: 1;
+  color: #a39af8;
+  transform: translate(0, 0);
+}
+
+/* ─── Pagination ─────────────────────────── */
+.db-pagination {
+  margin-top: 1rem;
+}
+
+.db-pagination .page-link {
+  background: #1e2130;
+  border-color: rgba(255,255,255,0.07);
+  color: #9095a8;
+  border-radius: 8px !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0.9rem;
+  transition: all 0.15s ease;
+}
+
+.db-pagination .page-link:hover {
+  background: #252840;
+  color: #e8eaf0;
+  border-color: rgba(124,110,245,0.3);
+}
+
+.db-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #7c6ef5, #5a4fcf);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(124,110,245,0.4);
+}
+
+.db-pagination .page-item.disabled .page-link {
+  background: #161921;
+  color: #5c6070;
+  border-color: rgba(255,255,255,0.04);
+}
+
+/* ─── Empty state ────────────────────────── */
+.db-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1rem;
+  gap: 1rem;
+}
+
+.db-empty-orb {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,110,245,0.18) 0%, rgba(124,110,245,0.04) 70%);
+  border: 1px solid rgba(124,110,245,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #7c6ef5;
+  margin-bottom: 0.5rem;
+  animation: pulse-orb 3s ease-in-out infinite;
+}
+
+@keyframes pulse-orb {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124,110,245,0.15); }
+  50%       { box-shadow: 0 0 0 16px rgba(124,110,245,0); }
+}
+
+.db-empty-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #e8eaf0;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.db-empty-sub {
+  color: #9095a8;
+  font-size: 0.95rem;
+  max-width: 320px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── Responsive ─────────────────────────── */
+@media (max-width: 768px) {
+  .db-page { padding: 1.5rem 1rem 4rem; }
+  .db-topbar { flex-direction: column; align-items: flex-start; }
+  .db-topbar-right { width: 100%; justify-content: space-between; }
+  .db-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+}
+</style>

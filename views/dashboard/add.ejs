@@ -1,33 +1,283 @@
-<div class="container-fluid container-fluid-custom pb-5 mb-5">
+<!-- ═══════════════════════════════════════════
+     ADD NOTE PAGE
+════════════════════════════════════════════ -->
 
-  <div class="row mb-4">
-    <div class="col">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-          <li class="breadcrumb-item active">Add Note</li>
-        </ol>
-      </nav>
-      <div class="col d-flex justify-content-between align-items-center">
-        <h1 class="h3">Add Note</h1>
-      </div>
+<div class="note-editor-page">
+
+  <!-- ── Header row ── -->
+  <div class="ne-topbar">
+    <div class="ne-breadcrumb">
+      <a href="/dashboard" class="ne-back">
+        <i class="bi bi-arrow-left"></i>
+        <span>Dashboard</span>
+      </a>
+      <span class="ne-breadcrumb-sep">/</span>
+      <span class="ne-breadcrumb-cur">New Note</span>
+    </div>
+
+    <div class="ne-actions">
+      <a href="/dashboard" class="ne-btn-ghost">Discard</a>
+      <button type="submit" form="addNoteForm" id="addNoteSubmitBtn" class="ne-btn-save">
+        <i class="bi bi-check-lg"></i> Save Note
+      </button>
     </div>
   </div>
 
+  <!-- ── Editor Card ── -->
+  <div class="ne-card">
 
-  <form action="/dashboard/add" method="POST" class="position-relative">
-    <div class="form-group mb-4 position-absolute" style="left:1px; top:1px; right: 1px;">
-      <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required>
+    <!-- Writing area indicator -->
+    <div class="ne-card-label">
+      <i class="bi bi-pencil-fill"></i> WRITE
     </div>
 
-    <div class="form-group mb-4">
-      <textarea required class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rows="12"></textarea>
-    </div>
+    <form action="/dashboard/add" method="POST" id="addNoteForm" class="ne-form">
 
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
-    </div>
+      <!-- Title -->
+      <div class="ne-field-title">
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Note title..."
+          required
+          autocomplete="off"
+          class="ne-input-title"
+        >
+      </div>
 
-  </form>
+      <!-- Divider -->
+      <div class="ne-divider"></div>
+
+      <!-- Body -->
+      <div class="ne-field-body">
+        <textarea
+          id="body"
+          name="body"
+          required
+          placeholder="Start writing your thoughts..."
+          rows="18"
+          class="ne-textarea"
+        ></textarea>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Mobile save button -->
+  <div class="ne-mobile-save">
+    <button type="submit" form="addNoteForm" class="ne-btn-save w-100">
+      <i class="bi bi-check-lg"></i> Save Note
+    </button>
+  </div>
 
 </div>
+
+<style>
+/* ─── Page shell ─────────────────────────── */
+.note-editor-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+/* ─── Top bar ────────────────────────────── */
+.ne-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ne-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ne-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9095a8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: #1e2130;
+  transition: all 0.18s ease;
+}
+
+.ne-back:hover {
+  color: #e8eaf0;
+  border-color: rgba(124,110,245,0.3);
+  background: #252840;
+}
+
+.ne-breadcrumb-sep {
+  color: #5c6070;
+  font-size: 0.85rem;
+}
+
+.ne-breadcrumb-cur {
+  color: #e8eaf0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ─── Action buttons ─────────────────────── */
+.ne-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ne-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9095a8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.55rem 1.1rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ne-btn-ghost:hover {
+  color: #e8eaf0;
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.ne-btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: linear-gradient(135deg, #7c6ef5, #5a4fcf);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(124,110,245,0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.ne-btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(124,110,245,0.5);
+  color: #fff;
+}
+
+/* ─── Editor card ────────────────────────── */
+.ne-card {
+  background: #1a1d24;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+.ne-card-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #5c6070;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.15);
+}
+
+.ne-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Title field ────────────────────────── */
+.ne-field-title {
+  padding: 1.8rem 1.8rem 1.2rem;
+}
+
+.ne-input-title {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #e8eaf0;
+  letter-spacing: -0.03em;
+  caret-color: #7c6ef5;
+  resize: none;
+}
+
+.ne-input-title::placeholder {
+  color: rgba(144, 149, 168, 0.35);
+}
+
+/* ─── Divider ────────────────────────────── */
+.ne-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 20%, rgba(255,255,255,0.07) 80%, transparent 100%);
+  margin: 0 1.8rem;
+}
+
+/* ─── Body textarea ──────────────────────── */
+.ne-field-body {
+  padding: 1.2rem 1.8rem 1.8rem;
+}
+
+.ne-textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #9095a8;
+  line-height: 1.85;
+  resize: vertical;
+  min-height: 340px;
+  caret-color: #7c6ef5;
+}
+
+.ne-textarea::placeholder {
+  color: rgba(144, 149, 168, 0.3);
+}
+
+/* ─── Mobile save ────────────────────────── */
+.ne-mobile-save {
+  display: none;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .note-editor-page { padding: 1.5rem 1rem 4rem; }
+  .ne-topbar { gap: 0.75rem; }
+  .ne-actions .ne-btn-ghost { display: none; }
+  .ne-actions .ne-btn-save { display: none; }
+  .ne-mobile-save { display: block; }
+  .ne-field-title { padding: 1.2rem; }
+  .ne-field-body { padding: 1rem 1.2rem 1.2rem; }
+  .ne-divider { margin: 0 1.2rem; }
+}
+</style>
